@@ -16,6 +16,7 @@ const firebaseConfig = {
 function App() {
   
   const app = initializeApp(firebaseConfig);
+  console.log(app);
   
   return (
     <div className="App">
