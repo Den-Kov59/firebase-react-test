@@ -4,10 +4,10 @@ import './App.css';
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCz2IG4qxKbsRXWshwKp-RYMX4IM6PIQ_I",
+  apiKey: "12",
   authDomain: "test-app-cbb2d.firebaseapp.com",
   projectId: "test-app-cbb2d",
-  storageBucket: "test-app-cbb2d.firebasestorage.app",
+  storageBucket: "12",
   messagingSenderId: "110679803978",
   appId: "1:110679803978:web:69f5c38b379a7255b5beb3"
 };
