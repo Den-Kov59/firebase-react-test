@@ -2,6 +2,16 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import { getMessaging, onMessage, getToken } from "firebase/messaging";
 import io from 'socket.io-client';
+import { initializeApp } from 'firebase/app';
+
+const firebaseApp = initializeApp({
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: "test-app-cbb2d.firebaseapp.com",
+  projectId: "test-app-cbb2d",
+  storageBucket: "test-app-cbb2d.firebasestorage.app",
+  messagingSenderId: "110679803978",
+  appId: "1:110679803978:web:69f5c38b379a7255b5beb3"
+});
 
   const messaging = getMessaging();
 const App = () => {
