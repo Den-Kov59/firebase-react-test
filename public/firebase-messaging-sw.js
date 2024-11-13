@@ -1,19 +1,8 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-undef */
 // Scripts for firebase and firebase messaging
-importScripts("https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js");
-importScripts(
-  "https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"
-);
-
-// Initialize the Firebase app in the service worker
-// "Default" Firebase configuration (prevents errors)
-const defaultConfig = {
-  apiKey: true,
-  projectId: true,
-  messagingSenderId: true,
-  appId: true,
-};
+importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging.js');
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -29,11 +18,14 @@ firebase.initializeApp(firebaseConfig);
 // Retrieve firebase messaging
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage((payload) => {
+// Add a listener to handle background messages
+messaging.onBackgroundMessage(function(payload) {
+  console.log('[firebase-messaging-sw.js] Received background message ', payload);
+  // Customize the notification here
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: payload.notification.image,
+    icon: '/firebase-logo.png' // You can customize this to any icon of your choice
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);

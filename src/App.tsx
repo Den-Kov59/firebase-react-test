@@ -46,7 +46,7 @@ const App = () => {
       try {
         const permission = await Notification.requestPermission();
         if (permission === 'granted') {
-          const currentToken = await getToken(messaging, { vapidKey: 'YOUR_PUBLIC_VAPID_KEY' });
+          const currentToken = await getToken(messaging, { vapidKey: 'BCspKUQ-lmDr1NIipm7ScAjtVFAz51pQduo8FGFZeyeUQkTcxYGIBKXkl1NEJbh1tRGeK8EK-aV18UVz6r5UrpQ' });
           if (currentToken) {
             console.log('Token generated:', currentToken);
             setToken(currentToken);
