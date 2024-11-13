@@ -31,15 +31,24 @@ const sendMessageToServer = (message: string, token: string) => {
 };
 
   
-  useEffect(() => {
-    const getTokena = async () => {
-      Notification.requestPermission()
-      const token = await getToken(messaging, { vapidKey: "BCspKUQ-lmDr1NIipm7ScAjtVFAz51pQduo8FGFZeyeUQkTcxYGIBKXkl1NEJbh1tRGeK8EK-aV18UVz6r5UrpQ" });
-      setToken(token);
-      console.log('got token', token); 
-    }
-    getTokena();
-  }, []);
+  Notification.requestPermission().then(permission => {
+  if (permission === 'granted') {
+    getToken(messaging, { vapidKey: 'YOUR_PUBLIC_VAPID_KEY' })
+      .then(currentToken => {
+        if (currentToken) {
+          console.log('Token generated:', currentToken);
+          setToken(currentToken);
+        } else {
+          console.log('No registration token available.');
+        }
+      })
+      .catch(err => {
+        console.error('Error while getting token:', err);
+      });
+  } else {
+    console.log('Unable to get permission to notify.');
+  }
+});
   
   onMessage(messaging, (payload) => {
     console.log('Message received. ', payload);
