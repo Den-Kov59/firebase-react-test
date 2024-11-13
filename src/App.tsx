@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { getMessaging, onMessage, getToken } from "firebase/messaging";
 import io from 'socket.io-client';
