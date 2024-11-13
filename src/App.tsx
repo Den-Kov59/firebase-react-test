@@ -26,7 +26,8 @@ const App = () => {
 socket.on('connect', () => {
   console.log('Connected to WebSocket server');
 });
-
+  console.log(firebaseConfig.apiKey);
+  
 
 const sendMessageToServer = (message: string, token: string) => {
   console.log('emmitting', JSON.stringify({ message, token }));
