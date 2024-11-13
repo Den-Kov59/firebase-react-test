@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { initializeApp } from "firebase/app";
-import { getMessaging, onMessage } from "firebase/messaging";
+import { getMessaging, onMessage, getToken } from "firebase/messaging";
 import io from 'socket.io-client';
 
 const firebaseConfig = {
@@ -12,14 +12,14 @@ const firebaseConfig = {
   messagingSenderId: "110679803978",
   appId: "1:110679803978:web:69f5c38b379a7255b5beb3"
 };
+  const app = initializeApp(firebaseConfig);
 
+  const messaging = getMessaging(app);
 
-
-
-function App() {
+const App = () => {
   const [messages, setMessages] = useState(['']);
   const [message, setMessage] = useState('');
-  
+  const [token, setToken] = useState('');
   const socket = io('https://service-app-1-110679803978.europe-west8.run.app'); // Adjust the URL to your backend
 
 // Connect to the server
@@ -28,13 +28,17 @@ socket.on('connect', () => {
 });
 
 
-const sendMessageToServer = (message: string) => {
-  socket.emit('message', message);
+const sendMessageToServer = (message: string, token: string) => {
+  socket.emit('message', JSON.stringify({message, token}));
 };
   
-  const app = initializeApp(firebaseConfig);
-
-  const messaging = getMessaging(app);
+  useEffect(() => {
+    const getTokena = async () => {
+      const token = await getToken(messaging, { vapidKey: "BCspKUQ-lmDr1NIipm7ScAjtVFAz51pQduo8FGFZeyeUQkTcxYGIBKXkl1NEJbh1tRGeK8EK-aV18UVz6r5UrpQ" });
+      setToken(token);
+    }
+    getTokena();
+  }, []);
   
   onMessage(messaging, (payload) => {
     console.log('Message received. ', payload);
@@ -44,7 +48,7 @@ const sendMessageToServer = (message: string) => {
   
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    sendMessageToServer(message);
+    sendMessageToServer(message, token);
     setMessage('');
   };
   
