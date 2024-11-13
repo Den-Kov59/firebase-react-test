@@ -29,13 +29,16 @@ socket.on('connect', () => {
 
 
 const sendMessageToServer = (message: string, token: string) => {
-  socket.emit('message', JSON.stringify({message, token}));
+  console.log('emmitting', JSON.stringify({ message, token }));
+  
+  socket.emit('message', JSON.stringify({ message, token }));
 };
   
   useEffect(() => {
     const getTokena = async () => {
       const token = await getToken(messaging, { vapidKey: "BCspKUQ-lmDr1NIipm7ScAjtVFAz51pQduo8FGFZeyeUQkTcxYGIBKXkl1NEJbh1tRGeK8EK-aV18UVz6r5UrpQ" });
       setToken(token);
+      console.log('got token', token); 
     }
     getTokena();
   }, []);
