@@ -15,6 +15,15 @@ const defaultConfig = {
   appId: true,
 };
 
+const firebaseConfig = {
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: "test-app-cbb2d.firebaseapp.com",
+  projectId: "test-app-cbb2d",
+  storageBucket: "test-app-cbb2d.firebasestorage.app",
+  messagingSenderId: "110679803978",
+  appId: "1:110679803978:web:69f5c38b379a7255b5beb3"
+};
+
 firebase.initializeApp(firebaseConfig);
 
 // Retrieve firebase messaging
