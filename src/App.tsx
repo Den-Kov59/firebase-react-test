@@ -23,7 +23,7 @@ const messaging = getMessaging();
 const App = () => {
   const [messages, setMessages] = useState<string[]>([]);
   const [message, setMessage] = useState<string>('');
-  const [token, setToken] = useState<string>('');
+  const [token, setToken] = useState<string>('123');
 
   // Initialize WebSocket connection
   const socket = io('https://service-app-1-110679803978.europe-west8.run.app');
@@ -64,17 +64,10 @@ const App = () => {
     requestNotificationPermission();
   }, []);
 
-  // Listen for Incoming FCM Messages
-  useEffect(() => {
-    const unsubscribe = onMessage(messaging, (payload) => {
+  onMessage(messaging, (payload) => {
       console.log('Message received: ', payload);
       setMessages((prevMessages) => [...prevMessages, payload.messageId || 'Unknown Message']); // Update the messages state correctly
     });
-
-    return () => {
-      unsubscribe(); // Clean up the FCM listener
-    };
-  }, []);
 
   // Function to Send Message to Server
   const sendMessageToServer = (message: string, token: string) => {
