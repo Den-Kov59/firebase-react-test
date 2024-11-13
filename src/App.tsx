@@ -4,7 +4,7 @@ import { getMessaging, onMessage, getToken } from "firebase/messaging";
 import io from 'socket.io-client';
 import { initializeApp } from 'firebase/app';
 
-const firebaseApp = initializeApp({
+initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: "test-app-cbb2d.firebaseapp.com",
   projectId: "test-app-cbb2d",
