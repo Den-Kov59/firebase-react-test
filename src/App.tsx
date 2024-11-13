@@ -35,12 +35,10 @@ const App = () => {
     });
 
     return () => {
-      socket.off('connect');
-      socket.disconnect(); // Clean up the socket connection
+      socket.disconnect(); 
     };
   }, [socket]);
 
-  // Request Notification Permission and Get Token
   useEffect(() => {
     const requestNotificationPermission = async () => {
       try {
@@ -69,13 +67,11 @@ const App = () => {
       setMessages((prevMessages) => [...prevMessages, payload.messageId || 'Unknown Message']); // Update the messages state correctly
     });
 
-  // Function to Send Message to Server
   const sendMessageToServer = (message: string, token: string) => {
     console.log('Emitting:', JSON.stringify({ message, token }));
-    socket.emit('message', JSON.stringify({ message, token }));
+    socket.emit("message", JSON.stringify({ message, token }));
   };
 
-  // Handle Form Submission
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (message.trim() && token) {
