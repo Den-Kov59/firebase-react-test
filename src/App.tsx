@@ -58,8 +58,9 @@ const App = () => {
         console.error('Error while getting token:', error);
       }
     };
-
-    requestNotificationPermission();
+    if (messaging) {
+      requestNotificationPermission();
+    }
   }, []);
 
   onMessage(messaging, (payload) => {
