@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
 import { getMessaging, onMessage, getToken } from "firebase/messaging";
 import io from 'socket.io-client';
@@ -20,24 +20,28 @@ initializeApp(firebaseConfig);
 // Get Messaging Instance
 const messaging = getMessaging();
 
+type TMessage = {
+  title: string,
+  body: string
+};
+
 const App = () => {
-  const [messages, setMessages] = useState<string[]>([]);
-  const [message, setMessage] = useState<string>('');
+  const [messages, setMessages] = useState<TMessage[]>([]);
+  const [messageBody, setMessageBody] = useState<string>('');
+  const [messageTitle, setMessageTitle] = useState<string>('');
   const [token, setToken] = useState<string>('123');
 
-  // Initialize WebSocket connection
-  const socket = io('https://firebase-backend-1-110679803978.europe-west4.run.app');
+  const socket = useRef(io('https://firebase-backend-1-110679803978.europe-west4.run.app'));
 
-  // Handle WebSocket connection events
   useEffect(() => {
-    socket.on('connect', () => {
+    socket.current.on('connect', () => {
       console.log('Connected to WebSocket server');
     });
 
     return () => {
-      socket.disconnect(); 
+      socket.current.disconnect(); 
     };
-  }, [socket]);
+  }, []);
 
   useEffect(() => {
     const requestNotificationPermission = async () => {
@@ -64,21 +68,24 @@ const App = () => {
   }, []);
 
   onMessage(messaging, (payload) => {
-      console.log('Message received: ', payload);
-      setMessages((prevMessages) => [...prevMessages, payload.messageId || 'Unknown Message']); // Update the messages state correctly
+    console.log('Message received: ', payload);
+    if (!payload.data) return;
+    const message: TMessage = { title: payload.data!.title, body: payload.data!.body };
+    setMessages((prevMessages) => [...prevMessages, message]);
     });
 
-  const sendMessageToServer = async (message: string, token: string) => {
-    console.log('Emitting:', JSON.stringify({ message, token }));
+  const sendMessageToServer = async (title: string, message: string, token: string) => {
+    console.log('Emitting:', JSON.stringify({ title, message, token }));
 
-    socket.emit("message", JSON.stringify({ message, token }));
+    socket.current.emit("message", JSON.stringify({ title, message, token }));
   };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (message.trim() && token) {
-      sendMessageToServer(message, token);
-      setMessage('');
+    if (messageBody.trim() && messageTitle.trim() && token) {
+      sendMessageToServer(messageTitle, messageBody, token);
+      setMessageBody('');
+      setMessageTitle('');
     }
   };
 
@@ -87,15 +94,27 @@ const App = () => {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          value={messageTitle}
+          onChange={(e) => setMessageTitle(e.target.value)}
           placeholder="Enter your message"
+          required
+        />
+
+        <input
+          type="text"
+          value={messageBody}
+          onChange={(e) => setMessageBody(e.target.value)}
+          placeholder="Enter your message"
+          required
         />
         <button type="submit">Send</button>
       </form>
       <div>
         {messages.map((mes, index) => (
-          <p key={index}>{mes}</p>
+          <div key={index}>
+            <h1>{mes.title}</h1>  
+            <p>{mes.body}</p>
+          </div>
         ))}
       </div>
     </div>
