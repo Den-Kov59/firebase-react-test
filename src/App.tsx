@@ -26,7 +26,7 @@ const App = () => {
   const [token, setToken] = useState<string>('123');
 
   // Initialize WebSocket connection
-  const socket = io('https://service-app-1-110679803978.europe-west8.run.app');
+  const socket = io('https://firebase-backend-1-110679803978.europe-west4.run.app');
 
   // Handle WebSocket connection events
   useEffect(() => {
@@ -67,8 +67,9 @@ const App = () => {
       setMessages((prevMessages) => [...prevMessages, payload.messageId || 'Unknown Message']); // Update the messages state correctly
     });
 
-  const sendMessageToServer = (message: string, token: string) => {
+  const sendMessageToServer = async (message: string, token: string) => {
     console.log('Emitting:', JSON.stringify({ message, token }));
+    await auth().signInAnonymously();
     socket.emit("message", JSON.stringify({ message, token }));
   };
 
