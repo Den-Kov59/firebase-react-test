@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { getMessaging, onMessage, getToken } from "firebase/messaging";
-import io from 'socket.io-client';
 import { initializeApp } from 'firebase/app';
+import getSocket from './initializers/socket';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -28,16 +28,14 @@ const App = () => {
   const [messageTitle, setMessageTitle] = useState<string>('');
   const [token, setToken] = useState<string>('123');
 
-  const socket = useRef(io('https://firebase-backend-1-110679803978.europe-west4.run.app'));
-
   useEffect(() => {
-    socket.current.on('connect', () => {
+    getSocket().on('connect', () => {
       console.log('Connected to WebSocket server');
     });
 
     return () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      socket.current.disconnect(); 
+      getSocket().disconnect(); 
     };
   }, []);
 
@@ -75,7 +73,7 @@ const App = () => {
   const sendMessageToServer = async (title: string, message: string, token: string) => {
     console.log('Emitting:', JSON.stringify({ title, message, token }));
 
-    socket.current.emit("message", JSON.stringify({ title, message, token }));
+    getSocket().emit("message", JSON.stringify({ title, message, token }));
   };
 
   const handleSubmit = (event: React.FormEvent) => {
