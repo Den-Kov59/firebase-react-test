@@ -94,7 +94,7 @@ const App = () => {
           type="text"
           value={messageTitle}
           onChange={(e) => setMessageTitle(e.target.value)}
-          placeholder="Enter your message"
+          placeholder="Enter title"
           required
         />
 
@@ -102,12 +102,12 @@ const App = () => {
           type="text"
           value={messageBody}
           onChange={(e) => setMessageBody(e.target.value)}
-          placeholder="Enter your message"
+          placeholder="Enter message"
           required
         />
         <button type="submit">Send</button>
       </form>
-      <div>
+      <div className='messages'>
         {messages.map((mes, index) => (
           <div key={index}>
             <h1>{mes.title}</h1>  
