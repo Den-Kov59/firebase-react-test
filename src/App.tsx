@@ -26,7 +26,7 @@ const App = () => {
   const [messages, setMessages] = useState<TMessage[]>([]);
   const [messageBody, setMessageBody] = useState<string>('');
   const [messageTitle, setMessageTitle] = useState<string>('');
-  const [token, setToken] = useState<string>('123');
+  const [token, setToken] = useState<string>('');
 
   useEffect(() => {
     getSocket().on('connect', () => {
@@ -72,7 +72,10 @@ const App = () => {
 
   const sendMessageToServer = async (title: string, message: string, token: string) => {
     console.log('Emitting:', JSON.stringify({ title, message, token }));
-
+    if (!token) {
+      console.log("No token cant send message");
+      return;
+    }
     getSocket().emit("message", JSON.stringify({ title, message, token }));
   };
 
