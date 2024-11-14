@@ -4,7 +4,6 @@ import { getMessaging, onMessage, getToken } from "firebase/messaging";
 import io from 'socket.io-client';
 import { initializeApp } from 'firebase/app';
 
-// Firebase Configuration
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: "test-app-cbb2d.firebaseapp.com",
@@ -14,10 +13,8 @@ const firebaseConfig = {
   appId: "1:110679803978:web:69f5c38b379a7255b5beb3"
 };
 
-// Initialize Firebase
 initializeApp(firebaseConfig);
 
-// Get Messaging Instance
 const messaging = getMessaging();
 
 type TMessage = {
@@ -39,6 +36,7 @@ const App = () => {
     });
 
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       socket.current.disconnect(); 
     };
   }, []);
@@ -72,7 +70,7 @@ const App = () => {
     if (!payload.data) return;
     const message: TMessage = { title: payload.data!.title, body: payload.data!.body };
     setMessages((prevMessages) => [...prevMessages, message]);
-    });
+  });
 
   const sendMessageToServer = async (title: string, message: string, token: string) => {
     console.log('Emitting:', JSON.stringify({ title, message, token }));
