@@ -69,7 +69,7 @@ const App = () => {
 
   const sendMessageToServer = async (message: string, token: string) => {
     console.log('Emitting:', JSON.stringify({ message, token }));
-    await auth().signInAnonymously();
+
     socket.emit("message", JSON.stringify({ message, token }));
   };
 
